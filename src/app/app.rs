@@ -2251,7 +2251,7 @@ impl<'a, 'v, 'ab, 'u, 'h, 'ar> App<'a, 'v, 'ab, 'u, 'h, 'ar>{
                 // may be trying to pass might match a subcommand name
                 if !pos_only {
                     if self.subcommands.contains_key(arg_slice) {
-                        if arg_slice == "help" {
+                        if arg_slice == "help" && self.needs_subcmd_help {
                             self.print_help();
                         }
                         subcmd_name = Some(arg_slice.to_owned());
@@ -2343,7 +2343,6 @@ impl<'a, 'v, 'ab, 'u, 'h, 'ar> App<'a, 'v, 'ab, 'u, 'h, 'ar>{
                                 vals.insert(len, arg_slice.to_owned());
                             }
                         }
-
                     } else {
                         // Only increment the positional counter if it doesn't allow multiples
                         pos_counter += 1;
@@ -2407,7 +2406,6 @@ impl<'a, 'v, 'ab, 'u, 'h, 'ar> App<'a, 'v, 'ab, 'u, 'h, 'ar>{
 
                         parse_group_reqs!(self, p);
                     }
-
                 } else {
                     return Err(self.report_error(format!("The argument '{}' was found, but '{}' \
                         wasn't expecting any", Format::Warning(arg.as_ref()),
